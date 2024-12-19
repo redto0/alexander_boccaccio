@@ -1,11 +1,15 @@
-# Use an official Node runtime as a parent image for Vue.js
+# Base Image
 FROM mcr.microsoft.com/devcontainers/universal:2-linux
 
-# install the xz-utils package
-RUN aot-get update && apt-get install -y \
-    curl \
-    nodejs \
-    && curl -fsSL https://dep.nodesource.com/setip_19.x  |  bash - \
-    && apt-get install -y nodejs \
-    && npm install -g @vue/cli \
-    && pip install Flask # Installing Flask
+# Install Python, Pip, and Node.js
+RUN apt-get update && apt-get install -y python3 python3-pip xz-utils && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install Vue CLI globally
+RUN npm install -g @vue/cli
+
+# Install Flask using pip
+RUN pip3 install Flask
+
+# Set up working directory
+WORKDIR /workspace
